@@ -17,11 +17,11 @@ echo "📍 Branche actuelle : $current_branch"
 
 # Déploiement selon la branche
 if [ "$current_branch" == "main" ]; then
-    echo "🚀 Poussée vers GitHub (main) et GitLab (gitlab-main)..."
+    echo "🚀 Poussée vers GitHub (main) et GitLab (main)..."
     git push github main
     git push gitlab main
 elif [ "$current_branch" == "main" ]; then
-    echo "🚀 Poussée uniquement vers GitLab (gitlab-main)..."
+    echo "🚀 Poussée uniquement vers GitLab (main)..."
     git push gitlab main
 else
     echo "❌ Branche inconnue, aucune poussée effectuée."
