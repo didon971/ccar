@@ -1,18 +1,20 @@
 #!/bin/bash
 
 # Demander un message de commit
-read -p "Message du commit : " message
+echo "Message du commit : "
+read commit_message
 
-# Ajouter tous les fichiers
+# Ajouter les changements
 git add .
 
-# Faire le commit
-git commit -m "$message"
+# Commit
+git commit -m "$commit_message"
 
-# Pousser vers GitHub
+# Pousser sur GitHub (branche main)
 git push github main
 
-# Pousser vers GitLab
-git push gitlab main
+# Pousser sur GitLab (branche gitlab-main)
+git push gitlab gitlab-main
 
-echo "✅ Déploiement terminé sur GitHub et GitLab !"
+echo "✅ Déploiement terminé sur GitHub (main) et GitLab (gitlab-main) !"
+
