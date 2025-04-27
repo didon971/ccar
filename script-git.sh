@@ -1,31 +1,26 @@
 #!/bin/bash
 
-# Demander un message de commit
+# --- CONFIG ---
+GITHUB_REMOTE="github"
+GITLAB_REMOTE="gitlab"
+BRANCH=$(git symbolic-ref --short HEAD) # récupère ta branche actuelle
+# ---
+
 echo "Message du commit : "
 read commit_message
 
-# Ajouter les changements
+# 1. Ajouter tous les changements
 git add .
 
-# Commit
+# 2. Commit
 git commit -m "$commit_message"
 
-# Détection de la branche actuelle
-current_branch=$(git branch --show-current)
+# 3. Push GitHub
+echo "🚀 Poussée vers GitHub ($GITHUB_REMOTE/$BRANCH)..."
+git push $GITHUB_REMOTE $BRANCH
 
-echo "📍 Branche actuelle : $current_branch"
+# 4. Push GitLab
+echo "🚀 Poussée vers GitLab ($GITLAB_REMOTE/$BRANCH)..."
+git push $GITLAB_REMOTE $BRANCH
 
-# Déploiement selon la branche
-if [ "$current_branch" == "main" ]; then
-    echo "🚀 Poussée vers GitHub (main) et GitLab (gitlab-main)..."
-    git push github main
-    git push gitlab gitlab-main
-elif [ "$current_branch" == "gitlab-main" ]; then
-    echo "🚀 Poussée uniquement vers GitLab (gitlab-main)..."
-    git push gitlab gitlab-main
-else
-    echo "❌ Branche inconnue, aucune poussée effectuée."
-    exit 1
-fi
-
-echo "✅ Déploiement terminé !"
+echo "✅ Déploiement terminé sur GitHub et GitLab ! 🎉"
