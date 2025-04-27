@@ -1,18 +1,26 @@
 #!/bin/bash
 
-# Demander un message de commit
-read -p "Message du commit : " message
+# --- CONFIG ---
+GITHUB_REMOTE="github"
+GITLAB_REMOTE="gitlab"
+BRANCH=$(git symbolic-ref --short HEAD) # récupère ta branche actuelle
+# ---
 
-# Ajouter tous les fichiers
+echo "Message du commit : "
+read commit_message
+
+# 1. Ajouter tous les changements
 git add .
 
-# Faire le commit
-git commit -m "$message"
+# 2. Commit
+git commit -m "$commit_message"
 
-# Pousser vers GitHub
-git push github main
+# 3. Push GitHub
+echo "🚀 Poussée vers GitHub ($GITHUB_REMOTE/$BRANCH)..."
+git push $GITHUB_REMOTE $BRANCH
 
-# Pousser vers GitLab
-git push gitlab main
+# 4. Push GitLab
+echo "🚀 Poussée vers GitLab ($GITLAB_REMOTE/$BRANCH)..."
+git push $GITLAB_REMOTE $BRANCH
 
-echo "✅ Déploiement terminé sur GitHub et GitLab !"
+echo "✅ Déploiement terminé sur GitHub et GitLab ! 🎉"
