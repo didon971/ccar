@@ -20,7 +20,7 @@ if [ "$current_branch" == "main" ]; then
     echo "🚀 Poussée vers GitHub (main) et GitLab (gitlab-main)..."
     git push github main
     git push gitlab gitlab-main
-elif [ "$current_branch" == "gitlab-main" ]; then
+elif [ "$current_branch" == "main" ]; then
     echo "🚀 Poussée uniquement vers GitLab (gitlab-main)..."
     git push gitlab gitlab-main
 else
