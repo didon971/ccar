@@ -1,18 +1,31 @@
 #!/bin/bash
 
 # Demander un message de commit
-read -p "Message du commit : " message
+echo "Message du commit : "
+read commit_message
 
-# Ajouter tous les fichiers
+# Ajouter les changements
 git add .
 
-# Faire le commit
-git commit -m "$message"
+# Commit
+git commit -m "$commit_message"
 
-# Pousser vers GitHub
-git push github main
+# Détection de la branche actuelle
+current_branch=$(git branch --show-current)
 
-# Pousser vers GitLab
-git push gitlab main
+echo "📍 Branche actuelle : $current_branch"
 
-echo "✅ Déploiement terminé sur GitHub et GitLab !"
+# Déploiement selon la branche
+if [ "$current_branch" == "main" ]; then
+    echo "🚀 Poussée vers GitHub (main) et GitLab (gitlab-main)..."
+    git push github main
+    git push gitlab gitlab-main
+elif [ "$current_branch" == "gitlab-main" ]; then
+    echo "🚀 Poussée uniquement vers GitLab (gitlab-main)..."
+    git push gitlab gitlab-main
+else
+    echo "❌ Branche inconnue, aucune poussée effectuée."
+    exit 1
+fi
+
+echo "✅ Déploiement terminé !"
