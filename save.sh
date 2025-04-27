@@ -1,13 +1,18 @@
 #!/bin/bash
 
-# --- CONFIG ---
-DATE=$(date +%Y-%m-%d_%H-%M-%S)
-BACKUP_DIR="$HOME/backup-ccar"
+# 📂 Dossier de sauvegarde
+BACKUP_DIR="save"
 
-# Création dossier de sauvegarde si besoin
-mkdir -p "$BACKUP_DIR"
+# 🕒 Timestamp
+TIMESTAMP=$(date +"%Y%m%d-%H%M%S")
 
-# Archive le projet
-tar -czvf "$BACKUP_DIR/ccar_backup_$DATE.tar.gz" /var/www/html/ccar
+# 📦 Archive name
+ARCHIVE_NAME="$BACKUP_DIR/backup-$TIMESTAMP.tar.gz"
 
-echo "✅ Backup effectué dans $BACKUP_DIR/ccar_backup_$DATE.tar.gz"
+# 🏗️ Créer le dossier de sauvegarde s'il n'existe pas
+mkdir -p $BACKUP_DIR
+
+# 🗜️ Créer l'archive
+tar --exclude="$BACKUP_DIR" --exclude=".git" -czf $ARCHIVE_NAME .
+
+echo "✅ Projet sauvegardé dans $ARCHIVE_NAME"

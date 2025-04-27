@@ -1,38 +1,38 @@
 #!/bin/bash
 
-# Demande le message du commit
-read -p "Message du commit : " message
+# 📌 Configuration
+GITHUB_REMOTE="github"
+GITLAB_REMOTE="gitlab"
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
-# Commit si des changements
+# 🖋️ Demander le message de commit
+echo "Message du commit : "
+read commit_message
+
+# 📝 Commit uniquement si des modifications existent
 if [ -n "$(git status --porcelain)" ]; then
     git add .
-    git commit -m "$message"
+    git commit -m "$commit_message"
 else
-    echo "✅ Aucun changement à commit, on continue..."
+    echo "✅ Rien à commit, dépôt propre."
 fi
 
-# Push GitHub
-echo "🚀 Poussée vers GitHub (github/gitlab-main)..."
-git push github gitlab-main
-github_status=$?
-
-if [ $github_status -ne 0 ]; then
+# 🚀 Pousser vers GitHub
+echo "🚀 Poussée vers GitHub ($GITHUB_REMOTE/$BRANCH)..."
+if ! git push $GITHUB_REMOTE $BRANCH; then
     echo "⚠️ Échec du push GitHub. Tentative de pull --rebase..."
-    git pull github gitlab-main --rebase
+    git pull --rebase $GITHUB_REMOTE $BRANCH
     echo "🔄 Nouvelle tentative de push GitHub..."
-    git push github gitlab-main
+    git push $GITHUB_REMOTE $BRANCH
 fi
 
-# Push GitLab
-echo "🚀 Poussée vers GitLab (gitlab/gitlab-main)..."
-git push gitlab gitlab-main
-gitlab_status=$?
-
-if [ $gitlab_status -ne 0 ]; then
+# 🚀 Pousser vers GitLab
+echo "🚀 Poussée vers GitLab ($GITLAB_REMOTE/$BRANCH)..."
+if ! git push $GITLAB_REMOTE $BRANCH; then
     echo "⚠️ Échec du push GitLab. Tentative de pull --rebase..."
-    git pull gitlab gitlab-main --rebase
+    git pull --rebase $GITLAB_REMOTE $BRANCH
     echo "🔄 Nouvelle tentative de push GitLab..."
-    git push gitlab gitlab-main
+    git push $GITLAB_REMOTE $BRANCH
 fi
 
 echo "✅ Déploiement terminé sur GitHub et GitLab ! 🎉"
