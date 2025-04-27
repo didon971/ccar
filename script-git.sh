@@ -13,6 +13,6 @@ git commit -m "$message"
 git push github main
 
 # Pousser vers GitLab
-git push gitlab main1
+git push gitlab main
 
 echo "✅ Déploiement terminé sur GitHub et GitLab !"
