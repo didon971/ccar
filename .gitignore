@@ -1,0 +1,25 @@
+# 📦 Dépendances PHP
+/vendor/
+
+# 🔑 Variables d'environnement
+.env
+
+# 📂 Fichiers uploadés
+/public/uploads/photos/
+/public/uploads/videos/
+
+# 🗑️ Fichiers temporaires
+*.log
+*.tmp
+
+# 🧹 Cache & sessions
+cache/
+tmp/
+*.cache
+
+# 🖼️ Images par défaut
+/public/images/default-bg.jpg
+
+# 🚫 Système
+.DS_Store
+Thumbs.db

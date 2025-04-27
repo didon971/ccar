@@ -1,0 +1,12 @@
+{
+    "name": "didon/html",
+    "description": "site campingcar",
+    "autoload": {
+        "psr-4": {
+            "Didon\\Html\\": "src/"
+        }
+    },
+    "require": {
+        "vlucas/phpdotenv": "^5.6"
+    }
+}
