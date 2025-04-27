@@ -1,26 +1,33 @@
 #!/bin/bash
 
-# --- CONFIG ---
-GITHUB_REMOTE="github"
-GITLAB_REMOTE="gitlab"
-BRANCH=$(git symbolic-ref --short HEAD) # récupère ta branche actuelle
-# ---
+# Demande le message du commit
+read -p "Message du commit : " message
 
-echo "Message du commit : "
-read commit_message
+# Commit si des changements
+if [ -n "$(git status --porcelain)" ]; then
+    git add .
+    git commit -m "$message"
+else
+    echo "✅ Aucun changement à commit, on continue..."
+fi
 
-# 1. Ajouter tous les changements
-git add .
+# Pousser sur GitHub
+echo "🚀 Poussée vers GitHub (github/gitlab-main)..."
+git push github gitlab-main
+github_status=$?
 
-# 2. Commit
-git commit -m "$commit_message"
+# Pousser sur GitLab
+echo "🚀 Poussée vers GitLab (gitlab/gitlab-main)..."
+git push gitlab gitlab-main
+gitlab_status=$?
 
-# 3. Push GitHub
-echo "🚀 Poussée vers GitHub ($GITHUB_REMOTE/$BRANCH)..."
-git push $GITHUB_REMOTE $BRANCH
+# Si échec GitLab à cause d'un non-fast-forward, faire un pull --rebase et re-push
+if [ $gitlab_status -ne 0 ]; then
+    echo "⚠️ Échec du push GitLab. Tentative de pull --rebase..."
+    git pull gitlab gitlab-main --rebase
 
-# 4. Push GitLab
-echo "🚀 Poussée vers GitLab ($GITLAB_REMOTE/$BRANCH)..."
-git push $GITLAB_REMOTE $BRANCH
+    echo "🔄 Nouvelle tentative de push vers GitLab..."
+    git push gitlab gitlab-main
+fi
 
 echo "✅ Déploiement terminé sur GitHub et GitLab ! 🎉"
